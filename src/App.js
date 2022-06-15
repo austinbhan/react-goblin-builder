@@ -3,6 +3,8 @@ import GoblinForm from './GoblinForm';
 import GoblinList from './GoblinList';
 import Goblin from './Goblin';
 
+import { useState } from 'react';
+
 function App() {
   /* 
     track: 
@@ -12,15 +14,42 @@ function App() {
       goblinFormHP, which is how we track the user input for the current HP of the goblin in the form
       goblinFormColor, which is how we track the user input for the current color of the goblin in the form
 */
+  const [goblinFormName, setGoblinFormName] = useState('');
+  const [goblinFormHP, setGoblinFormHP] = useState(''); 
+  const [goblinFormColor, setGoblinFormColor] = useState(''); 
+
+  const [allGoblins, setGoblins] = useState([
+    {
+      name: 'Bob',
+      hp: 5,
+      color: 'green'
+    },
+    {
+      name: 'Bill',
+      hp: 2,
+      color: 'red' 
+    },
+    {
+      name: 'Booger', 
+      hp: 3,
+      color: 'blue'
+    }
+  ]);
   
   function submitGoblin(e) {
     e.preventDefault();
-    
     // on submit, make a new goblin object with a name that comes from the form state, an hp that comes from the form state, and a color that comes from the form state
-
+    
+    const goblin = {
+      name: goblinFormName,
+      hp: goblinFormHP,
+      color: goblinFormColor,
+    };
     // update the allGoblins array. Add the new goblin to the allGoblins array immutably.
     
+    const updatedGoblins = [...allGoblins, goblin];
     // clear out the goblin form state items by setting them to empty strings. This will cause the form to reset in the UI.
+    setGoblins(updatedGoblins);
   }
 
   function handleDeleteGoblin(name) {
@@ -55,10 +84,11 @@ function App() {
         <input onChange={(e) => handleFilterGoblins(e.target.value)} />
       </div>
       <GoblinForm 
+        submitGoblin={submitGoblin}
         /*
         This component takes in a ton of props! 
         Here is the list of props to pass:
-          submitGoblin,
+          submitGoblin, done
           goblinFormName, 
           setGoblinFormName,
           goblinFormColor, 
